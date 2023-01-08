@@ -55,7 +55,7 @@ while true; do
  echo "LICENSE.md.bak" > ".gitignore"
 
   git init
-  git remote add origin "git://github.com/gannonh"
+  git remote add origin git@github.com:gannonh/$pkg.git
   git add .
   git commit -m "Commit message"
   git push origin master
