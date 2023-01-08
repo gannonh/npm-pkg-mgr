@@ -15,51 +15,49 @@ while true; do
     mv "package.json" "package.json.bak"
   fi
 
-   if [ -f "README.md" ]; then
+  if [ -f "README.md" ]; then
     mv "README.md" "README.md.bak"
   fi
 
-   if [ -f "LICENSE.md" ]; then
+  if [ -f "LICENSE.md" ]; then
     mv "LICENSE.md" "LICENSE.md.bak"
   fi
 
   touch "README.md"
-  echo "# $pkg" >> "README.md"
-  echo "" >> "README.md"
-  echo "Homepage: https://github.com/gannonh/$pkg#readme" >> "README.md"
+  echo "# $pkg" >>"README.md"
+  echo "" >>"README.md"
+  echo "Homepage: https://github.com/gannonh/$pkg#readme" >>"README.md"
 
   touch "LICENSE.md"
-  echo "MIT License" >> "LICENSE.md"
-  echo "" >> "LICENSE.md"
-  echo "Copyright (c) 2023 @gannonh" >> "LICENSE.md"
-  echo "" >> "LICENSE.md"
-  echo "Permission is hereby granted, free of charge, to any person obtaining a copy" >> "LICENSE.md"
-  echo "of this software and associated documentation files (the \"Software\"), to deal" >> "LICENSE.md"
-  echo "in the Software without restriction, including without limitation the rights" >> "LICENSE.md"
-  echo "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" >> "LICENSE.md"
-  echo "copies of the Software, and to permit persons to whom the Software is" >> "LICENSE.md"
-  echo "furnished to do so, subject to the following conditions:" >> "LICENSE.md"
-  echo "" >> "LICENSE.md"
-  echo "The above copyright notice and this permission notice shall be included in all" >> "LICENSE.md"
-  echo "copies or substantial portions of the Software." >> "LICENSE.md"
-  echo "" >> "LICENSE.md"
-  echo "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" >> "LICENSE.md"
-  echo "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," >> "LICENSE.md"
-  echo "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" >> "LICENSE.md"
-  echo "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" >> "LICENSE.md"
-  echo "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," >> "LICENSE.md"
-  echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" >> "LICENSE.md"
+  echo "MIT License" >>"LICENSE.md"
+  echo "" >>"LICENSE.md"
+  echo "Copyright (c) 2023 @gannonh" >>"LICENSE.md"
+  echo "" >>"LICENSE.md"
+  echo "Permission is hereby granted, free of charge, to any person obtaining a copy" >>"LICENSE.md"
+  echo "of this software and associated documentation files (the \"Software\"), to deal" >>"LICENSE.md"
+  echo "in the Software without restriction, including without limitation the rights" >>"LICENSE.md"
+  echo "to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" >>"LICENSE.md"
+  echo "copies of the Software, and to permit persons to whom the Software is" >>"LICENSE.md"
+  echo "furnished to do so, subject to the following conditions:" >>"LICENSE.md"
+  echo "" >>"LICENSE.md"
+  echo "The above copyright notice and this permission notice shall be included in all" >>"LICENSE.md"
+  echo "copies or substantial portions of the Software." >>"LICENSE.md"
+  echo "" >>"LICENSE.md"
+  echo "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" >>"LICENSE.md"
+  echo "IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," >>"LICENSE.md"
+  echo "FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" >>"LICENSE.md"
+  echo "AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" >>"LICENSE.md"
+  echo "LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," >>"LICENSE.md"
+  echo "OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" >>"LICENSE.md"
 
- echo "package.json.bak" > ".gitignore"
- echo "README.md.bak" > ".gitignore"
- echo "LICENSE.md.bak" > ".gitignore"
+  echo "package.json.bak" >>".gitignore"
+  echo "README.md.bak" >>".gitignore"
+  echo "LICENSE.md.bak" >>".gitignore"
 
-  git init
-  git remote add origin git@github.com:gannonh/$pkg.git
-  git add .
-  git commit -m "Commit message"
-  git push origin master
+  cd ../
+  gh repo create $pkg --public --clone
 
+  cd "$pkg"
   npm init --scope=@$user
   npm publish --access public
 
