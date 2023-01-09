@@ -62,6 +62,7 @@ while true; do
   npm publish --access public
 
   # create the package.json file
+  rm package.json
   touch package.json
 
   # add the content to the package.json file
@@ -96,7 +97,7 @@ while true; do
     },
     \"repository\": {
       \"type\": \"git\",
-      \"url\": \"git://github.com/gannonh/$pkg.git\"
+      \"url\": \"git+https://github.com/gannonh/$pkg.git\"
     },
     \"bugs\": {
       \"url\": \"https://github.com/gannonh/$pkg/issues\"
