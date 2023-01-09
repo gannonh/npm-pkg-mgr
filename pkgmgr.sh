@@ -68,7 +68,7 @@ while true; do
   # add the content to the package.json file
   echo "{
     \"name\": \"@$user/$pkg\",
-    \"version\": \"1.0.0\",
+    \"version\": \"1.0.1\",
     \"main\": \"dist/cjs.js\",
     \"module\": \"dist/esm.js\",
     \"generativeFmManifest\": \"$pkg.gfm.manifest.json\",
@@ -103,7 +103,18 @@ while true; do
       \"url\": \"https://github.com/gannonh/$pkg/issues\"
     },
     \"homepage\": \"https://github.com/gannonh/$pkg#readme\"
-  }" > package.json
+  }" >package.json
+
+  manifest_file=$(find . -maxdepth 1 -name "*.gfm.manifest.json")
+  if [ -n "$manifest_file" ]; then
+    mv "$manifest_file" "$pkg.gfm.manifest.json"
+  fi
+
+  jq --arg pkg "$pkg" '.title = $pkg' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+  jq --arg pkg "$pkg" '.id = $pkg' "$pkg.gfm.manifest.json" > tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+  jq --arg user "$user" '.artistId = $user' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+  jq --arg date "$(date +'%Y-%m-%d')" '.releasedDate = $date' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+  jq --arg pkg "$pkg" 'if .sampleNames then .sampleNames |= [.[] | map(sub("^.*__"; $pkg+"__"))] else . end' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
 
   cd ../
 
