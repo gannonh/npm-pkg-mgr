@@ -61,6 +61,49 @@ while true; do
   npm init --scope=@$user
   npm publish --access public
 
+  # create the package.json file
+  touch package.json
+
+  # add the content to the package.json file
+  echo "{
+    \"name\": \"@$user/$pkg\",
+    \"version\": \"1.0.0\",
+    \"main\": \"dist/cjs.js\",
+    \"module\": \"dist/esm.js\",
+    \"generativeFmManifest\": \"$pkg.gfm.manifest.json\",
+    \"files\": [
+      \"dist\",
+      \"image.png\",
+      \"$pkg.gfm.manifest.json\"
+    ],
+    \"author\": \"$user\",
+    \"license\": \"MIT\",
+    \"devDependencies\": {
+      \"@babel/plugin-transform-runtime\": \"^7.12.1\",
+      \"rollup-plugin-json\": \"^3.1.0\"
+    },
+    \"dependencies\": {
+      \"@babel/runtime\": \"^7.12.5\",
+      \"@$user/utilities\": \"^5.2.0\",
+      \"markov-chains\": \"^1.0.2\"
+    },
+    \"peerDependencies\": {
+      \"tone\": \"^14.7.39\"
+    },
+    \"unpkg\": \"dist/umd.min.js\",
+    \"scripts\": {
+      \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"
+    },
+    \"repository\": {
+      \"type\": \"git\",
+      \"url\": \"git://github.com/gannonh/$pkg.git\"
+    },
+    \"bugs\": {
+      \"url\": \"https://github.com/gannonh/$pkg/issues\"
+    },
+    \"homepage\": \"https://github.com/gannonh/$pkg#readme\"
+  }" > package.json
+
   cd ../
 
   echo "The following operations were completed:"
