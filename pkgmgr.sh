@@ -3,6 +3,10 @@
 while true; do
   read -p "Enter package name: " pkg
   read -p "Enter npm username: " user
+  # ask if user wants to rewrite package.json
+  read -p "Do you want to rewrite package.json? (y/n) " yn
+  # first go up 1 level
+  cd ../
 
   if [ -d "$pkg" ]; then
     cd "$pkg"
@@ -11,8 +15,13 @@ while true; do
     cd "$pkg"
   fi
 
-  if [ -f "package.json" ]; then
-    mv "package.json" "package.json.bak"
+  # if yes to rewriting package.json
+  if [ "$yn" = "y" ]; then
+    # if package.json exists
+    if [ -f "package.json" ]; then
+      # move package.json to package.json.bak
+      mv "package.json" "package.json.bak"
+    fi
   fi
 
   if [ -f "README.md" ]; then
@@ -61,12 +70,13 @@ while true; do
   npm init --scope=@$user
   npm publish --access public
 
-  # create the package.json file
-  rm package.json
-  touch package.json
+  # if yes to rewriting package.json
+  if [ "$yn" = "y" ]; then
+    rm package.json
+    touch package.json
 
-  # add the content to the package.json file
-  echo "{
+    # add the content to the package.json file
+    echo "{
     \"name\": \"@$user/$pkg\",
     \"version\": \"1.0.1\",
     \"main\": \"dist/cjs.js\",
@@ -105,16 +115,18 @@ while true; do
     \"homepage\": \"https://github.com/gannonh/$pkg#readme\"
   }" >package.json
 
-  manifest_file=$(find . -maxdepth 1 -name "*.gfm.manifest.json")
-  if [ -n "$manifest_file" ]; then
-    mv "$manifest_file" "$pkg.gfm.manifest.json"
-  fi
+    manifest_file=$(find . -maxdepth 1 -name "*.gfm.manifest.json")
+    if [ -n "$manifest_file" ]; then
+      mv "$manifest_file" "$pkg.gfm.manifest.json"
+    fi
 
-  jq --arg pkg "$pkg" '.title = $pkg' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
-  jq --arg pkg "$pkg" '.id = $pkg' "$pkg.gfm.manifest.json" > tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
-  jq --arg user "$user" '.artistId = $user' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
-  jq --arg date "$(date +'%Y-%m-%d')" '.releasedDate = $date' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
-  jq --arg pkg "$pkg" 'if .sampleNames then .sampleNames |= [.[] | map(sub("^.*__"; $pkg+"__"))] else . end' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+    jq --arg pkg "$pkg" '.title = $pkg' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+    jq --arg pkg "$pkg" '.id = $pkg' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+    jq --arg user "$user" '.artistId = $user' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+    jq --arg date "$(date +'%Y-%m-%d')" '.releasedDate = $date' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+    jq --arg pkg "$pkg" 'if .sampleNames then .sampleNames |= [.[] | map(sub("^.*__"; $pkg+"__"))] else . end' "$pkg.gfm.manifest.json" >tmp.json && mv tmp.json "$pkg.gfm.manifest.json"
+
+  fi
 
   cd ../
 
