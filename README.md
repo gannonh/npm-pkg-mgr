@@ -10,3 +10,8 @@
 
 - ```dirch.sh``` - partial dir renames
 -  ```redir.sh``` - dir renames
+-  Update  pqckage:
+    ```bash
+    npm version minor
+    npm publish
+    ```
